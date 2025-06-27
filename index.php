@@ -129,6 +129,24 @@ try {
     // remove all GET parameters such as ?q=
     $request->get->clear();
 
+    if (isset($_SESSION['authenticated']) && isset($_GET['q'])) {
+    $log_file = __DIR__ . '/logs/history.txt';
+
+    $log_data = [
+        'time' => date('Y-m-d H:i:s'),
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'url' => $_GET['q']
+    ];
+
+    $entry = json_encode($log_data) . PHP_EOL;
+
+    if (!is_dir(__DIR__ . '/logs')) {
+        mkdir(__DIR__ . '/logs', 0755, true);
+    }
+
+    file_put_contents($log_file, $entry, FILE_APPEND | LOCK_EX);
+}
+
     // forward it to some other URL
     $response = $proxy->forward($request, $url);
 
