@@ -1,5 +1,30 @@
 <?php
 
+session_start();
+
+$proxy_password = 'Admin'; // Change this to your password
+
+if (!isset($_SESSION['authenticated'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
+        if ($_POST['password'] === $proxy_password) {
+            $_SESSION['authenticated'] = true;
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit;
+        } else {
+            $error = 'Wrong password!';
+        }
+    }
+
+    echo '<!DOCTYPE html><html><head><title>Login</title></head><body>';
+    if (!empty($error)) echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
+    echo '<form method="post">
+            <input type="password" name="password" placeholder="Enter Password" required />
+            <button type="submit">Login</button>
+          </form>';
+    echo '</body></html>';
+    exit;
+}
+
 define('PROXY_START', microtime(true));
 
 require("vendor/autoload.php");
