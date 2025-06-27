@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "."]
